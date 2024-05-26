@@ -1,0 +1,71 @@
+# Server configuration
+server:
+  # Port on which the Spring Boot application will run
+  port: 8080
+
+spring:
+  # DataSource configuration
+  datasource:
+    # JDBC URL for the MySQL database named 'user_registration'
+    url: jdbc:mysql://localhost:3306/user_registration
+    # Username for the database
+    username: root
+    # Password for the database
+    password: root
+    # MySQL JDBC driver class name
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # JPA configuration
+  jpa:
+    # Show SQL statements in the log
+    show-sql: true
+    hibernate:
+      # Automatically update the database schema based on the entity mappings
+      ddl-auto: update
+
+  # Spring Security OAuth2 client configuration
+  security:
+    oauth2:
+      client:
+        # Client registration details
+        registration:
+          # Registration for OIDC (OpenID Connect) client
+          api-client-oidc:
+            # Name of the provider configuration to use
+            provider: spring
+            # Client ID for the OAuth2 client
+            client-id: api-client
+            # Client secret for the OAuth2 client
+            client-secret: secret
+            # Authorization grant type (authorization code grant type)
+            authorization-grant-type: authorization_code
+            # Redirect URI after authorization
+            redirect-uri: "http://127.0.0.1:8080/login/oauth2/code/{registrationId}"
+            # Scope of the authorization
+            scope: openid
+            # Name of the client
+            client-name: api-client-oidc
+
+          # Registration for another OAuth2 client using authorization code
+          api-client-authorization-code:
+            # Name of the provider configuration to use
+            provider: spring
+            # Client ID for the OAuth2 client
+            client-id: api-client
+            # Client secret for the OAuth2 client
+            client-secret: secret
+            # Authorization grant type (authorization code grant type)
+            authorization-grant-type: authorization_code
+            # Redirect URI after authorization
+            redirect-uri: "http://127.0.0.1:8080/authorized"
+            # Scope of the authorization
+            scope: api.read
+            # Name of the client
+            client-name: api-client-authorization-code
+
+        # Provider details
+        provider:
+          # Configuration for the 'spring' provider
+          spring:
+            # Issuer URI for the provider, specifying the authorization server
+            issuer-uri: http://auth-server:9000
